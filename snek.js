@@ -15,6 +15,7 @@ function setup(){
   imageMode(CENTER);
 
   UNIT = height/10;
+  noStroke();
 }
 
 function draw(){
@@ -116,8 +117,25 @@ Snake.prototype.bodyHelper = function bodyHelper(target, index){
   }
   //we're in a corner
   else if(backNeighbor.x !== frontNeighbor.x && backNeighbor.y !== frontNeighbor.y){
-    rectMode(CENTER);
-    rect(0,0,UNIT,UNIT);
+    let x = (backNeighbor.x-target.x)+(frontNeighbor.x-target.x);
+    let y = (backNeighbor.y-target.y)+(frontNeighbor.y-target.y);
+
+    if(x === 1 && y === 1){//right down
+      //nochange
+    }
+    else if(x == -1 && y == 1){ //left down
+      rotate(90);
+    }
+    else if(x == -1 && y == -1){ //left up
+      rotate(180);
+    }
+    else if(x == 1 && y == -1){ //right up
+      rotate(-90);
+    }
+    else{
+      console.log("corner is messed up");
+    }
+    image(this.corner,0,0,UNIT,UNIT);
   }
   else{
     console.log("this snek got twisted");
@@ -128,7 +146,7 @@ Snake.prototype.bodyHelper = function bodyHelper(target, index){
 
 var Coord = function Coord(x,y){
   if(typeof x === "undefined" ||
-     typeof y === "undefined"){
+      typeof y === "undefined"){
     console.log("x and y MUST be defined");
     return;
   }
