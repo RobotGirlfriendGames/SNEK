@@ -3,14 +3,17 @@ let UNIT;
 let theSnake;
 let theEgg;
 let gameOverState = false;
+let pauseState = false;
 
+/********************************************************************
+ * p5.js functions
+ * *****************************************************************/
 //loading assets
 function preload(){
   theSnake = new Snake().preload();
   theEgg = new Egg().preload();
 }
 
-//setup p5 stuff
 function setup(){
   createCanvas(windowHeight-10,windowHeight-10);
   frameRate(7);
@@ -32,6 +35,35 @@ function keyPressed(){
   if(gameOverState && keyCode === ENTER){
     gameRestart();
   }
+  if(!gameOverState && keyCode === CONTROL){
+    if(pauseState){
+      loop();
+      pauseState = false;
+    }
+    else{
+      noLoop();
+      pauseState = true;
+    }
+  }
+}
+
+/********************************************************************
+ * gameOver functions
+ * *****************************************************************/
+function gameOver(){
+  gameOverState = true;
+  noLoop();
+  noStroke();
+  fill(255);
+  text("game over brew",50,50);
+}
+
+function gameRestart(){
+  background(0);
+  theSnake.reset();
+  //theEgg.reset();
+  gameOverState = false;
+  loop();
 }
 
 /********************************************************************
@@ -291,21 +323,3 @@ Coord.prototype.copy = function copy(){
   return new Coord(this.x,this.y);
 };
 
-/********************************************************************
- * gameOver
- * *****************************************************************/
-function gameOver(){
-  gameOverState = true;
-  noLoop();
-  noStroke();
-  fill(255);
-  text("game over brew",50,50);
-}
-
-function gameRestart(){
-  background(0);
-  theSnake.reset();
-  //theEgg.reset();
-  gameOverState = false;
-  loop();
-}
