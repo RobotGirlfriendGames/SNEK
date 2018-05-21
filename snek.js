@@ -21,13 +21,33 @@ function setup(){
   imageMode(CENTER);
   noStroke();
 
-  UNIT = height/10;
+  UNIT = (height-30)/10;
 }
 
 function draw(){
-  background(202,220,159);
+  background(15,56,15);
+
+  push();
+  translate(15,10);
+  fill(202,220,159);
+  rect(0,0,10*UNIT,10*UNIT);
   theSnake.move().draw();
   theEgg.draw();
+  pop();
+
+  /*
+  fill(0,0,0,0);
+  stroke(15,56,15);
+  strokeWeight(10);
+  rect(15,10,10*UNIT,10*UNIT);
+  */
+
+  push();
+  let scoreNotice = "Score: " + theSnake.bodyPositions.length + "/100";
+  translate(15,(10*UNIT+15));
+  fill(202,220,159);
+  text(scoreNotice,2,10);
+  pop();
 }
 
 function keyPressed(){
@@ -248,10 +268,10 @@ Snake.prototype.move = function move(){
   }
 
   //see if we ran over the edge of the world
-  if( this.headPosition.y*UNIT >= height  ||
-      this.headPosition.y*UNIT <  0       ||
-      this.headPosition.x*UNIT >= width   ||
-      this.headPosition.x*UNIT <  0
+  if( this.headPosition.y >= 10  ||
+      this.headPosition.y <  0       ||
+      this.headPosition.x >= 10   ||
+      this.headPosition.x <  0
     ){
     gameOver();
   }
