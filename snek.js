@@ -15,7 +15,8 @@ function preload(){
 }
 
 function setup(){
-  createCanvas(windowHeight-10,windowHeight-10);
+  let side = windowHeight<windowWidth ? windowHeight : windowWidth;
+  createCanvas(side-10,side-10);
   frameRate(7);
   angleMode(DEGREES);
   imageMode(CENTER);
