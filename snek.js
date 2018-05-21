@@ -4,6 +4,7 @@ let theSnake;
 let theEgg;
 let gameOverState = false;
 let pauseState = false;
+let theMusic;
 
 /********************************************************************
  * p5.js functions
@@ -12,6 +13,8 @@ let pauseState = false;
 function preload(){
   theSnake = new Snake().preload();
   theEgg = new Egg().preload();
+  soundFormats('ogg', 'mp3');
+  theMusic = loadSound("assets/SSSSSS.ogg");
 }
 
 function setup(){
@@ -21,6 +24,7 @@ function setup(){
   angleMode(DEGREES);
   imageMode(CENTER);
   noStroke();
+  theMusic.loop();
 
   UNIT = (height-30)/10;
 }
