@@ -81,7 +81,6 @@ function gameOver(){
 function gameRestart(){
   background(0);
   theSnake.reset();
-  //theEgg.reset();
   gameOverState = false;
   loop();
 }
@@ -303,11 +302,13 @@ Snake.prototype.move = function move(){
  * Egg object - has all the details about the egg
  * *****************************************************************/
 var Egg = function Egg(){
-  this.position = new Coord(Math.floor(Math.random()*10),Math.floor(Math.random()*10));
-  return this;
-};
-Egg.prototype.reset = function reset(){
-  this.position = new Coord(Math.floor(Math.random()*10),Math.floor(Math.random()*10));
+  this.board = [];
+  for(let i=0;i<10;i++){
+    for(let j=0;j<10;j++){
+      this.board.push(new Coord(i,j));
+    }
+  }
+  this.move();
   return this;
 };
 Egg.prototype.preload = function preload(){
@@ -315,8 +316,22 @@ Egg.prototype.preload = function preload(){
   return this;
 };
 Egg.prototype.move = function move(){
-  this.position.x = Math.floor(Math.random()*10);
-  this.position.y = Math.floor(Math.random()*10);
+  let available = this.board.filter((curr) => {
+    if(curr.equals(theSnake.headPosition)){return false;}
+    if(curr.equals(theSnake.tailPosition)){return false;}
+
+    for(let i=0;i<theSnake.bodyPositions.length;i++){
+      if(curr.equals(theSnake.bodyPositions[i])){return false;}
+    }
+
+    return true;
+  });
+  this.position = random(available);
+
+  if(this.position.equals(theSnake.headPosition)){
+
+  }
+  return this;
 }
 Egg.prototype.draw = function draw(){
   push();
@@ -342,4 +357,7 @@ var Coord = function Coord(x,y){
 Coord.prototype.copy = function copy(){
   return new Coord(this.x,this.y);
 };
+Coord.prototype.equals = function equals(other){
+  return this.x === other.x && this.y === other.y;
+}
 
