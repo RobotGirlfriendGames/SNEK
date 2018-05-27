@@ -15,6 +15,7 @@ function preload(){
   theEgg = new Egg().preload();
   soundFormats('ogg', 'mp3');
   theMusic = loadSound("assets/SSSSSS.ogg");
+  eggSFX = loadSound("assets/APPLE.ogg");
 }
 
 function setup(){
@@ -24,6 +25,7 @@ function setup(){
   angleMode(DEGREES);
   imageMode(CENTER);
   noStroke();
+  theMusic.setVolume(0.5);
   theMusic.loop();
 
   UNIT = (height-30)/10;
@@ -298,6 +300,7 @@ Snake.prototype.move = function move(){
   }
   else{
     theEgg.move();
+	eggSFX.play();
   }
 
   return this;
