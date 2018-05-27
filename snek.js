@@ -2,9 +2,12 @@
 let UNIT;
 let theSnake;
 let theEgg;
+let theMusic;
+let theStartScreen;
+
 let gameOverState = false;
 let pauseState = false;
-let theMusic;
+let startState = true;
 
 /********************************************************************
  * p5.js functions
@@ -13,6 +16,7 @@ let theMusic;
 function preload(){
   theSnake = new Snake().preload();
   theEgg = new Egg().preload();
+  theStartScreen = loadImage("assets/titlefram1.png");
   soundFormats('ogg', 'mp3');
   theMusic = loadSound("assets/SSSSSS.ogg");
   eggSFX = loadSound("assets/APPLE.ogg");
@@ -25,41 +29,51 @@ function setup(){
   angleMode(DEGREES);
   imageMode(CENTER);
   noStroke();
-  theMusic.setVolume(0.5);
-  theMusic.loop();
 
   UNIT = (height-30)/10;
 }
 
 function draw(){
-  background(15,56,15);
+  if(startState){
+    push();
+    imageMode(CORNER);
+    image(theStartScreen,0,0,width,height);
+    //321 529
+    if(second()%2 === 0){
+      fill(15,56,15);
+      noStroke();
+      rect((0.23*width),(0.545*height),(0.55*width),(0.12*height));
+    }
+    pop();
+  }
+  else{
+    background(15,56,15);
 
-  push();
-  translate(15,10);
-  fill(202,220,159);
-  rect(0,0,10*UNIT,10*UNIT);
-  theSnake.move().draw();
-  theEgg.draw();
-  pop();
+    push();
+    translate(15,10);
+    fill(202,220,159);
+    rect(0,0,10*UNIT,10*UNIT);
+    theSnake.move().draw();
+    theEgg.draw();
+    pop();
 
-  /*
-  fill(0,0,0,0);
-  stroke(15,56,15);
-  strokeWeight(10);
-  rect(15,10,10*UNIT,10*UNIT);
-  */
-
-  push();
-  let scoreNotice = "Score: " + theSnake.bodyPositions.length + "/100";
-  translate(15,(10*UNIT+15));
-  fill(202,220,159);
-  text(scoreNotice,2,10);
-  pop();
+    push();
+    let scoreNotice = "Score: " + theSnake.bodyPositions.length + "/100";
+    translate(15,(10*UNIT+15));
+    fill(202,220,159);
+    text(scoreNotice,2,10);
+    pop();
+  }
 }
 
 function keyPressed(){
   theSnake.key = keyCode;
-  if(gameOverState && keyCode === ENTER){
+  if(startState && keyCode === ENTER){
+    startState = false;
+    theMusic.setVolume(0.5);
+    theMusic.loop();
+  }
+  else if(gameOverState && keyCode === ENTER){
     gameRestart();
   }
   if(!gameOverState && keyCode === CONTROL){
@@ -300,7 +314,7 @@ Snake.prototype.move = function move(){
   }
   else{
     theEgg.move();
-	eggSFX.play();
+    eggSFX.play();
   }
 
   return this;
